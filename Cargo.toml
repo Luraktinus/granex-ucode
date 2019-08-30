@@ -1,14 +1,14 @@
 [package]
 edition = "2018"
-name = "granex"
-version = "0.1.0"
-description = "Tor v3 Vanity Address Generator"
+name = "granex-ucode"
+version = "0.0.1"
+description = "Tor v3 Vanity Address Generator uCode Edition"
 license = "MIT/Apache-2.0"
-authors = ["Vitaly Domnikov <oss@vitaly.codes>"]
+authors = ["Vitaly Domnikov <oss@vitaly.codes>","Lukas Friedrich <lukas.b.friedrich@gmail.com>"]
 readme = "readme.md"
-documentation = "https://github.com/dotcypress/granex"
-homepage = "https://github.com/dotcypress/granex"
-repository = "https://github.com/dotcypress/granex"
+documentation = "https://git.ucode.space/Lukas/granex-ucode"
+homepage = "https://git.ucode.space/Lukas/granex-ucode"
+repository = "https://git.ucode.space/Lukas/granex-ucode"
 keywords = ["onion", "tor"]
 
 [dependencies]
