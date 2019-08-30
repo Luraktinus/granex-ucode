@@ -1,5 +1,3 @@
-#![feature(test)]
-
 use clap::{App, Arg};
 use std::env::current_dir;
 use std::path::PathBuf;
