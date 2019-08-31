@@ -5,21 +5,32 @@ use rand::{thread_rng, Rng};
 use std::fs::{create_dir_all, File};
 use std::io::{Result, Write};
 use std::path::PathBuf;
+use std::thread;
 
 const ALPHABET: &'static [u8] = b"abcdefghijklmnopqrstuvwxyz234567";
 const SECRET_KEY_PREFIX: &'static [u8] = b"== ed25519v1-secret: type0 ==\0\0\0";
 const CHECKSUM_PREFIX: &'static [u8] = b".onion checksum";
 const VERSION_SUFFIX: [u8; 1] = [3];
 
-pub fn start(prefix: &str, output_dir: PathBuf) -> Result<()> {
+pub fn start(prefix: &str, output_dir: PathBuf, threads: i32) -> Result<()> {
   let mut rng = thread_rng();
   let mut seed = [0u8; 20];
   loop {
-    rng.fill(&mut seed[..]);
-    let (secret, address) = generate_address(&seed);
-    if address.starts_with(prefix) {
-      save_key(&output_dir, secret, &address)?;
-      return Ok(());
+    let mut children = vec![];
+    for _i in 0..threads {
+      rng.fill(&mut seed[..]);
+      children.push(thread::spawn( move || {
+        let (sec, add) = generate_address(&seed);
+        (sec, add)
+      }))
+    }
+    for child in children {
+      let ressum = child.join().unwrap();
+      let (secret, address) = ressum;
+      if address.starts_with(prefix) {
+        save_key(&output_dir, secret, &address)?;
+        return Ok(());
+      }
     }
   }  
 }
@@ -76,20 +87,4 @@ fn base32encode(data: &[u8]) -> String {
     res.truncate(len - num_extra);
   }
   String::from_utf8(res).unwrap()
-}
-
-#[cfg(test)]
-mod tests {
-  extern crate test;
-  use super::*;
-
-  #[bench]
-  fn bench_address_generate(b: &mut test::Bencher) {
-    let mut rng = thread_rng();
-    let mut seed = [0u8; 20];
-    b.iter(move || {
-      rng.fill(&mut seed[..]);
-      generate_address(&seed);
-    });
-  }
 }

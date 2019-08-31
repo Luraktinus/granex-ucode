@@ -1,7 +1,7 @@
 [package]
 edition = "2018"
 name = "granex-ucode"
-version = "0.0.1"
+version = "0.0.2"
 description = "Tor v3 Vanity Address Generator uCode Edition"
 license = "MIT/Apache-2.0"
 authors = ["Vitaly Domnikov <oss@vitaly.codes>","Lukas Friedrich <lukas.b.friedrich@gmail.com>"]
